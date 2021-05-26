@@ -273,6 +273,7 @@ void drawText(SDL_Renderer *renderer, int width, char *string, TTF_Font *font, S
     SDL_RenderCopy(renderer, texture, NULL, &rect);
     free(stringBuffer);
     SDL_DestroyTexture(texture);
+    texture = NULL;
 
     pCurrent = pNext;
     stringWidth -= maxWidthPerLine;
@@ -283,10 +284,8 @@ void drawText(SDL_Renderer *renderer, int width, char *string, TTF_Font *font, S
      maxWidthPerLine, pCurrent would be a NULL pointer because the
      property of c string. Therefore we need to check if it is
      NULL. Otherwise, an error will rise. */
-  if (!pCurrent)
+  if (strcmp(pCurrent, ""))
     texture = createUtf8StringTexture(pCurrent, font, color, renderer);
-  else
-    return;
   if (!texture)
     return;
   SDL_QueryTexture(texture, NULL, NULL, &w, &h);
