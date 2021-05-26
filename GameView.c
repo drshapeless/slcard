@@ -66,100 +66,100 @@ void run(Deck *deck, char *outputDatabase) {
     if (SDL_WaitEvent(&e)) {
       switch (e.type) {
       case SDL_QUIT:
-	exit = 1;
-	break;
+        exit = 1;
+        break;
       case SDL_WINDOWEVENT:
-	if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
-	  windowResizeCallback(window, &width, &height, &answerRect, &counterRect);
-	  /* Redraw. */
-	  SDL_RenderClear(renderer);
-	  drawSmallText(renderer, memory, font, red, memoryRect);
-	  drawSmallText(renderer, counter, font, white, counterRect);
+        if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
+          windowResizeCallback(window, &width, &height, &answerRect, &counterRect);
+          /* Redraw. */
+          SDL_RenderClear(renderer);
+          drawSmallText(renderer, memory, font, red, memoryRect);
+          drawSmallText(renderer, counter, font, white, counterRect);
 
-	  /* drawSmallText(renderer, question, font, white, questionRect); */
-	  /* if (showAnswer) */
-	  /*   drawSmallText(renderer, answer, font, white, answerRect); */
-	  drawText(renderer, width, question, font, white, questionRect);
-	  if (showAnswer)
-	    drawText(renderer, width, answer, font, white, answerRect);
-	  SDL_RenderPresent(renderer);
-	}
-	break;
+          /* drawSmallText(renderer, question, font, white, questionRect); */
+          /* if (showAnswer) */
+          /*   drawSmallText(renderer, answer, font, white, answerRect); */
+          drawText(renderer, width, question, font, white, questionRect);
+          if (showAnswer)
+            drawText(renderer, width, answer, font, white, answerRect);
+          SDL_RenderPresent(renderer);
+        }
+        break;
       case SDL_KEYDOWN:
-	switch (e.key.keysym.sym) {
-	case SDLK_ESCAPE:
-	  exit = 1;
-	  break;
-	case SDLK_SPACE:
-	  toggle(&showAnswer);
-	  break;
-	case SDLK_d:
-	  exportToDatabase(deck, outputDatabase);
-	  break;
-	case SDLK_j:
-	  deck->counts[gameItem[pos]]++;
-	  if (pos + 1 < itemCount) {
-	    pos++;
-	    showAnswer = 0;
-	  }
-	  break;
-	case SDLK_k:
-	  if (deck->counts[gameItem[pos]] > 0)
-	    deck->counts[gameItem[pos]]--;
-	  if (pos + 1 < itemCount) {
-	    pos++;
-	    showAnswer = 0;
-	  }
-	  break;
-	case SDLK_n:
-	  if (pos + 1 < itemCount) {
-	    pos++;
-	    showAnswer = 0;
-	  }
-	  break;
-	case SDLK_o:
-	  free(gameItem);
-	  gameItem = forgottenCards(deck->counts, deck->used, &itemCount);
-	  if (gameItem)
-	    shuffleCards(gameItem, itemCount);
-	  pos = 0;
-	  showAnswer = 0;
-	  break;
-	case SDLK_p:
-	  if (pos > 0) {
-	    pos--;
-	    showAnswer = 0;
-	  }
-	  break;
-	case SDLK_s:
-	  shuffleCards(gameItem, itemCount);
-	  pos = 0;
-	  showAnswer = 0;
-	case SDLK_t:
-	  for (int i = 0; i < deck->used; i++)
-	    deck->counts[i]++;
-	  free(gameItem);
-	  gameItem = forgottenCards(deck->counts, deck->used, &itemCount);
-	  shuffleCards(gameItem, itemCount);
-	  pos = 0;
-	  showAnswer = 0;
-	  break;
-	}
-	updateString(deck, gameItem, pos, itemCount, &question, &answer, memory, counter);
-	/* Redraw. */
-	SDL_RenderClear(renderer);
-	drawSmallText(renderer, memory, font, red, memoryRect);
-	drawSmallText(renderer, counter, font, white, counterRect);
-	/* drawSmallText(renderer, question, font, white, questionRect); */
-	/* if (showAnswer) */
-	/*   drawSmallText(renderer, answer, font, white, answerRect); */
+        switch (e.key.keysym.sym) {
+        case SDLK_ESCAPE:
+          exit = 1;
+          break;
+        case SDLK_SPACE:
+          toggle(&showAnswer);
+          break;
+        case SDLK_d:
+          exportToDatabase(deck, outputDatabase);
+          break;
+        case SDLK_j:
+          deck->counts[gameItem[pos]]++;
+          if (pos + 1 < itemCount) {
+            pos++;
+            showAnswer = 0;
+          }
+          break;
+        case SDLK_k:
+          if (deck->counts[gameItem[pos]] > 0)
+            deck->counts[gameItem[pos]]--;
+          if (pos + 1 < itemCount) {
+            pos++;
+            showAnswer = 0;
+          }
+          break;
+        case SDLK_n:
+          if (pos + 1 < itemCount) {
+            pos++;
+            showAnswer = 0;
+          }
+          break;
+        case SDLK_o:
+          free(gameItem);
+          gameItem = forgottenCards(deck->counts, deck->used, &itemCount);
+          if (gameItem)
+            shuffleCards(gameItem, itemCount);
+          pos = 0;
+          showAnswer = 0;
+          break;
+        case SDLK_p:
+          if (pos > 0) {
+            pos--;
+            showAnswer = 0;
+          }
+          break;
+        case SDLK_s:
+          shuffleCards(gameItem, itemCount);
+          pos = 0;
+          showAnswer = 0;
+        case SDLK_t:
+          for (int i = 0; i < deck->used; i++)
+            deck->counts[i]++;
+          free(gameItem);
+          gameItem = forgottenCards(deck->counts, deck->used, &itemCount);
+          shuffleCards(gameItem, itemCount);
+          pos = 0;
+          showAnswer = 0;
+          break;
+        }
+        updateString(deck, gameItem, pos, itemCount, &question, &answer, memory, counter);
+        /* Redraw. */
+        SDL_RenderClear(renderer);
+        drawSmallText(renderer, memory, font, red, memoryRect);
+        drawSmallText(renderer, counter, font, white, counterRect);
+        /* drawSmallText(renderer, question, font, white, questionRect); */
+        /* if (showAnswer) */
+        /*   drawSmallText(renderer, answer, font, white, answerRect); */
 
-	/* printf("%s\n%s\n", question, answer); */
-	drawText(renderer, width, question, font, white, questionRect);
-	if (showAnswer)
-	  drawText(renderer, width, answer, font, white, answerRect);
-	SDL_RenderPresent(renderer);
-	break;
+        /* printf("%s\n%s\n", question, answer); */
+        drawText(renderer, width, question, font, white, questionRect);
+        if (showAnswer)
+          drawText(renderer, width, answer, font, white, answerRect);
+        SDL_RenderPresent(renderer);
+        break;
       }
     }
   }
@@ -236,7 +236,7 @@ char *utf8strndup(char *s, int width, char **nextPtr) {
 SDL_Texture *createUtf8StringTexture(char *string, TTF_Font *font, SDL_Color color, SDL_Renderer *renderer) {
   SDL_Surface *surface = TTF_RenderUTF8_Blended(font, string, color);
   if (!surface) {
-    printf("createUtf8StringTexture: Cannot create surface.\n");
+    printf("createUtf8StringTexture: Cannot create surface.\n%s\n", string);
     return NULL;
   }
 
@@ -252,7 +252,6 @@ SDL_Texture *createUtf8StringTexture(char *string, TTF_Font *font, SDL_Color col
 
 void drawText(SDL_Renderer *renderer, int width, char *string, TTF_Font *font, SDL_Color color, SDL_Rect rect) {
   int stringWidth = utf8StringWidth(string);
-  printf("drawText: stringWidth = %d\n", stringWidth);
   int lineCount = 0;
   int w, h;
   int y = rect.y;
@@ -262,7 +261,6 @@ void drawText(SDL_Renderer *renderer, int width, char *string, TTF_Font *font, S
   char *pNext;
   /* This is full char width. */
   int maxWidthPerLine = (width - WINDOW_PADDING * 4) / FONT_SIZE * 2;
-  printf("max width: %d\n", maxWidthPerLine);
   while (stringWidth > maxWidthPerLine) {
     stringBuffer = utf8strndup(pCurrent, maxWidthPerLine, &pNext);
     texture = createUtf8StringTexture(stringBuffer, font, color, renderer);
@@ -281,7 +279,14 @@ void drawText(SDL_Renderer *renderer, int width, char *string, TTF_Font *font, S
     lineCount++;
   }
 
-  texture = createUtf8StringTexture(pCurrent, font, color, renderer);
+  /* In some rare case, the string is just bigger than
+     maxWidthPerLine, pCurrent would be a NULL pointer because the
+     property of c string. Therefore we need to check if it is
+     NULL. Otherwise, an error will rise. */
+  if (!pCurrent)
+    texture = createUtf8StringTexture(pCurrent, font, color, renderer);
+  else
+    return;
   if (!texture)
     return;
   SDL_QueryTexture(texture, NULL, NULL, &w, &h);
