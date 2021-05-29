@@ -12,6 +12,6 @@ typedef struct Text {
   SDL_Rect rect;
 } Text;
 
-void run(Deck *deck, char *outputDatabase);
+void run(Deck *deck, char *outputDatabase, char *scoreFileName);
 
 #endif /* GAMEVIEW_H */

@@ -1,5 +1,6 @@
 #include "Config.h"
 #include "Flashcard.h"
+#include "Utilities.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -82,25 +83,25 @@ void addDatabase(Deck *deck, char *database) {
       break;
     case '\"':
       while ((c = fgetc(file)) != '\"') {
-	current[pos++] = c;
+        current[pos++] = c;
       }
       current[pos] = '\0';
       break;
     case ',':
       if (current == q) {
-	current = a;
+        current = a;
       }
       pos = 0;
       break;
     default:
       cnt[pos++] = c;
       while ((c = fgetc(file)) != '}') {
-	cnt[pos++] = c;
+        cnt[pos++] = c;
       }
       cnt[pos] = '\0';
       addNewCard(deck, q, a, strtol(cnt, NULL, 10));
       if ((c = fgetc(file)) != ',') {
-	exit = 1;
+        exit = 1;
       }
       break;
     }
@@ -108,25 +109,6 @@ void addDatabase(Deck *deck, char *database) {
 
   fclose(file);
   printf("Database imported: %s\n", database);
-}
-
-char *fgetline(FILE *f) {
-  /* This is a custom getline function. */
-  int c;
-  char line[STRING_SIZE];
-  size_t pos = 0;
-  while ((c = fgetc(f)) != EOF || pos == STRING_SIZE - 1) {
-    if (c != '\n')
-      line[pos++] = c;
-    else
-      break;
-  }
-  line[pos] = '\0';
-
-  if (c == EOF)
-    return NULL;
-  else
-    return strdup(line);
 }
 
 void addFile(Deck *deck, char *file) {
