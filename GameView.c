@@ -52,8 +52,8 @@ void run(Deck *deck, char *outputDatabase, char *scoreFileName) {
   SDL_Rect answerRect = {padding, height / 2, 0, 0};
   SDL_Rect memoryRect = {padding, padding, 0, 0};
   SDL_Rect counterRect = {width - padding - fontsize * 4, padding, 0, 0};
-  SDL_Rect goodScoreRect = {width / 4 * 3, padding, 0, 0};
-  SDL_Rect badScoreRect = {width / 4, padding, 0, 0};
+  SDL_Rect goodScoreRect = {width / 3 * 2, padding, 0, 0};
+  SDL_Rect badScoreRect = {width / 3, padding, 0, 0};
 
   char *question = "test question.";
   char *answer = "test answer.";
@@ -124,7 +124,8 @@ void run(Deck *deck, char *outputDatabase, char *scoreFileName) {
           break;
         case SDLK_d:
           exportToDatabase(deck, outputDatabase);
-          exportToScoreFile(scoreFileName, badScore, goodScore);
+          if (scoreMode)
+            exportToScoreFile(scoreFileName, badScore, goodScore);
           break;
         case SDLK_j:
           deck->counts[gameItem[pos]]++;
@@ -228,8 +229,8 @@ void windowResizeCallback(SDL_Window *window, int *width, int *height, SDL_Rect 
   SDL_GetWindowSize(window, width, height);
   answerRect->y = *height / 2;
   counterRect->x += *width;
-  goodScoreRect->x = *width / 4 * 3;
-  badScoreRect->x = *width / 4;
+  goodScoreRect->x = *width / 3 * 2;
+  badScoreRect->x = *width / 3;
 }
 
 int utf8StringWidth(char *s) {
