@@ -1,0 +1,33 @@
+#+TITLE: slcard - Shapeless Card
+
+* Introduction
+  This is a simple flashcard application using SDL2, featuring
+  keyboard-centric controls and extreme minimalistic.
+
+* Background
+  This application is for personal use. I needed a flashcard tool to
+  memerize a lot of things. The most famous flashcard application is
+  Anki.
+
+  However, I consider Anki to be extremely bloated and
+  insecure. First, Anki supports a lot of formats of flashcard, and
+  uses SQL to store the decks, which I do not need.
+
+  Second, using Anki requires you to register an account, and the
+  database you made are automatically shared to everyone.
+
+  Third, and the most important point is, Anki is not very
+  keyboard-centric, and has a very limited way to customize you keys.
+
+  Also, the iOS version of Anki is proprietary and ridiculously
+  expensive.
+
+  Therefore, I got my hands dirty and made my own simple flashcard
+  which fits all my needs.
+
+* Features
+  - Written in pure C, depends on SDL2 and SDL2_ttf only.
+  - Only use keyboard to control.
+  - Databases are in txt format, easy to edit with any software.
+  - Uses command line interface to import and export databases, great
+    for automation.

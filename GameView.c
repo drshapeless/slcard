@@ -11,6 +11,7 @@ void windowResizeCallback(SDL_Window *window, int *width, int *height, SDL_Rect 
 void drawText(SDL_Renderer *renderer, int width, char *string, TTF_Font *font, SDL_Color color, SDL_Rect rect);
 void drawSmallText(SDL_Renderer *renderer, char *string, TTF_Font *font, SDL_Color color, SDL_Rect rect);
 void exportToScoreFile(char *scoreFileName, int badScore, int goodScore);
+void writeToLogFile(char *outputDatabase, int badScore, int goodScore);
 
 void run(Deck *deck, char *outputDatabase, char *scoreFileName) {
   SDL_Window *window = SDL_CreateWindow(WINDOW_TITLE, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
@@ -117,6 +118,7 @@ void run(Deck *deck, char *outputDatabase, char *scoreFileName) {
       case SDL_KEYDOWN:
         switch (e.key.keysym.sym) {
         case SDLK_ESCAPE:
+          writeToLogFile(outputDatabase, badScore, goodScore);
           exit = 1;
           break;
         case SDLK_SPACE:
@@ -357,4 +359,19 @@ void exportToScoreFile(char *scoreFileName, int badScore, int goodScore) {
   fprintf(scoreFile, "%s\n", buf);
   fclose(scoreFile);
   printf("Score file exported: %s\n", scoreFileName);
+}
+
+void writeToLogFile(char *outputDatabase, int badScore, int goodScore) {
+  FILE *log;
+  log = fopen(LOG_PATH, "a");
+  char buf[64];
+  time_t now = time(NULL);
+  strftime(buf, 64, "%Y-%m-%d %H:%M:%S", localtime(&now));
+
+  if (outputDatabase == NULL)
+    fprintf(log, "%s, bad: %d, good: %d\n", buf, badScore, goodScore);
+  else
+    fprintf(log, "%s, bad: %d, good: %d, \"%s\"\n", buf, badScore, goodScore, outputDatabase);
+
+  printf("Written to log file.\n");
 }

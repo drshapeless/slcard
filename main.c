@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
   char *databaseName = NULL;
   int noGame = 0;
   int runInTerminal = 0;
+  int noScore = 0;
 
   char *scoreFileName = NULL;
 
@@ -62,6 +63,11 @@ int main(int argc, char *argv[]) {
   if (noGame) {
     exportToDatabase(deck, databaseName);
     return 0;
+  }
+
+  if (scoreFileName == NULL && !noScore) {
+    scoreFileName = malloc(STRING_SIZE);
+    strcpy(scoreFileName, SCORE_PATH);
   }
 
   if (runInTerminal) {

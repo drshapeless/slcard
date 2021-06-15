@@ -14,5 +14,7 @@
 #define WINDOW_TITLE "slcard"
 
 #define FONT_PATH "/usr/share/fonts/TTF/PingFang.ttc"
+#define SCORE_PATH "/home/jacky/revision/score.txt"
+#define LOG_PATH "/home/jacky/revision/slcard_log.txt"
 
 #endif /* CONFIG_H */
