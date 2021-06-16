@@ -8,7 +8,7 @@
 #define WINDOW_PADDING 15
 #define INITIAL_DECK_SIZE 100
 #define STRING_SIZE 3000    /* Increase the string size if necessary.*/
-#define COUNT_SIZE 5        /* This would be enough for 9999 cards. */
+#define COUNT_SIZE 7        /* This would be enough for 999999. */
 
 #define DATABASE_DIRECTORY "/home/jacky/revision/database/";
 #define WINDOW_TITLE "slcard"

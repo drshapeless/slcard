@@ -13,6 +13,8 @@ void drawSmallText(SDL_Renderer *renderer, char *string, TTF_Font *font, SDL_Col
 void exportToScoreFile(char *scoreFileName, int badScore, int goodScore);
 void writeToLogFile(char *outputDatabase, int badScore, int goodScore);
 
+char *endGameMessage = "Press T to start new game.";
+
 void run(Deck *deck, char *outputDatabase, char *scoreFileName) {
   SDL_Window *window = SDL_CreateWindow(WINDOW_TITLE, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
   if (!window) {
@@ -119,6 +121,8 @@ void run(Deck *deck, char *outputDatabase, char *scoreFileName) {
         switch (e.key.keysym.sym) {
         case SDLK_ESCAPE:
           writeToLogFile(outputDatabase, badScore, goodScore);
+          if (scoreMode)
+            exportToScoreFile(scoreFileName, badScore, goodScore);
           exit = 1;
           break;
         case SDLK_SPACE:
@@ -219,11 +223,16 @@ void run(Deck *deck, char *outputDatabase, char *scoreFileName) {
 
 void updateString(Deck *deck, int *game, int pos, int itemCount, char **question, char **answer, char *memory, char *counter) {
 
-  *question = deck->cards[game[pos]].question;
-  *answer = deck->cards[game[pos]].answer;
+  if (game != NULL) {
+    *question = deck->cards[game[pos]].question;
+    *answer = deck->cards[game[pos]].answer;
 
-  sprintf(memory, "%d", deck->counts[game[pos]]);
-  sprintf(counter, "%d / %d", pos + 1, itemCount);
+    sprintf(memory, "%d", deck->counts[game[pos]]);
+    sprintf(counter, "%d / %d", pos + 1, itemCount);
+  } else {
+    *question = endGameMessage;
+    *answer = endGameMessage;
+  }
 }
 
 void windowResizeCallback(SDL_Window *window, int *width, int *height, SDL_Rect *answerRect, SDL_Rect *counterRect, SDL_Rect *goodScoreRect, SDL_Rect *badScoreRect) {
@@ -373,5 +382,5 @@ void writeToLogFile(char *outputDatabase, int badScore, int goodScore) {
   else
     fprintf(log, "%s, bad: %d, good: %d, \"%s\"\n", buf, badScore, goodScore, outputDatabase);
 
-  printf("Written to log file.\n");
+  printf("Wrote to log file.\n");
 }
