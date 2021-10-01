@@ -13,7 +13,9 @@ void printEndGameMessage(void);
 void consoleRun(FlashcardGame *game) {
   printf("slcard: You are running in console mode.\n");
   int exit = 0;
-  if (!newGame(game)) {
+  int success = newGame(game);
+
+  if (!success) {
     printEndGameMessage();
   }
 
@@ -32,12 +34,14 @@ void consoleRun(FlashcardGame *game) {
       toggleShowAnswer(game);
       break;
     case 'n':
-      if (!nextCard(game)) {
+      success = nextCard(game);
+      if (!success) {
         puts("You have reach the end.");
       }
       break;
     case 'p':
-      if (!previousCard(game)) {
+      success = previousCard(game);
+      if (!success) {
         puts("You have reach the beginning.");
       }
       break;
@@ -49,7 +53,8 @@ void consoleRun(FlashcardGame *game) {
       break;
     case 'o':
       /* Open new game. */
-      if (!newGame(game)) {
+      success = newGame(game);
+      if (!success) {
         printEndGameMessage();
       }
       break;
