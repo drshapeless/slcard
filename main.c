@@ -1,104 +1,85 @@
 #include "Config.h"
+#include "Console.h"
 #include "Flashcard.h"
-#include "GameView.h"
-#include "Terminal.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#include "Gui.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 void showUsage(void);
+void showVersion(void);
 
 int main(int argc, char *argv[]) {
-  Deck *deck = createDeck();
-  char *databaseName = NULL;
+  FlashcardGame *game = createGame();
+
   int noGame = 0;
-  int runInTerminal = 0;
-  int noScore = 0;
+  int consoleMode = 0;
 
-  char *scoreFileName = NULL;
-
-  if (argc == 1) {
-    showUsage();
-    return 0;
-  } else {
-    int pos;
-    for (pos = 1; pos < argc; ++pos) {
-      if (argv[pos][0] == '-') {
-        switch (argv[pos][1]) {
-        case 'h':
-          showUsage();
-          return 0;
-          break;
-        case 'd':
-          addDatabase(deck, argv[++pos]);
-          break;
-        case 'l':
-          addFileList(deck, argv[++pos]);
-          break;
-        case 'o':
-          databaseName = strdup(argv[++pos]);
-          break;
-        case 'n':
-          noGame = 1;
-          break;
-        case 's':
-          scoreFileName = strdup(argv[++pos]);
-          break;
-        case 't':
-          runInTerminal = 1;
-          break;
-        default:
-          showUsage();
-          return -1;
-          break;
-        }
-      } else {
-        addFile(deck, argv[pos]);
-      }
+  int c;
+  while ((c = getopt(argc, argv, "hncvd:f:l:o:s:")) != -1) {
+    switch (c) {
+    case 'h':
+      showUsage();
+      return 0;
+    case 'v':
+      showVersion();
+      return 0;
+    case 'n':
+      noGame = 1;
+      break;
+    case 'c':
+      consoleMode = 1;
+      break;
+    case 'd':
+      addDatabase(game, optarg);
+      break;
+    case 'f':
+      addFile(game, optarg);
+      break;
+    case 'l':
+      addFileList(game, optarg);
+      break;
+    case 's':
+      importScoreFile(game, optarg);
+      break;
+    case 'o':
+      game->outputDatabasePath = optarg;
+      break;
+    case '?':
+      printf("Missing argument at %c\n", optopt);
+      return -1;
+    default:
+      return 0;
     }
   }
 
   if (noGame) {
-    exportToDatabase(deck, databaseName);
+    exportToDatabase(game);
     return 0;
   }
 
-  if (scoreFileName == NULL && !noScore) {
-    scoreFileName = malloc(STRING_SIZE);
-    strcpy(scoreFileName, SCORE_PATH);
-  }
-
-  if (runInTerminal) {
-    termRun(deck, databaseName);
+  if (consoleMode) {
+    consoleRun(game);
   } else {
-    /* Initializing SDL */
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-      printf("Unable to initialize SDL: %s\n", SDL_GetError());
-      return 1;
-    }
-    /* Initializing SDL_ttf */
-    if (TTF_Init() == -1) {
-      printf("Unable to initialize SDL_ttf.\n");
-      SDL_Quit();
-      return 1;
-    }
-    run(deck, databaseName, scoreFileName);
+    guiRun(game);
   }
-
   return 0;
 }
 
 void showUsage(void) {
-  printf(
-         "slcard [options] [file]\n"
+  printf("slcard [options] [file]\n"
          "-h               Show this help and quit.\n"
          "-n               Export database and do not initialize a game.\n"
-         "-t               Run in terminal mode.\n"
-         "-d file          Treat the file as database.\n"
-         "-l file          Treat the file as file list.\n"
-         "-s file          Treat the file as score file.\n"
-         "-o file          Export as file.\n"
-         );
+         "-c               Run in console mode.\n"
+         "-f               Add a plain file.\n"
+         "-d file          Add a database.\n"
+         "-l file          Add a file list.\n"
+         "-s file          Specify the score file.\n"
+         "-o file          Export as file.\n");
+}
+
+void showVersion(void) {
+  puts("slcard version 2.0.0");
 }

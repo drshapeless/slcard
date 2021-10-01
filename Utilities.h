@@ -1,8 +1,9 @@
-#ifndef UTILITIES_H
-#define UTILITIES_H
+#ifndef UITILITIES_H
+#define UITILITIES_H
 
 #include <stdio.h>
 void toggle(int *i);
-char *fgetline(FILE *f);
+char *fgetline(FILE *file);
+void swap(int *a, int *b);
 
-#endif /* UTILITIES_H */
+#endif /* UITILITIES_H */

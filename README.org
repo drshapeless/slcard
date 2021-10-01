@@ -1,8 +1,198 @@
 #+TITLE: slcard - Shapeless Card
 
+* 2.0 announcement
+  slcard has been rewritten complete.
+
+  In version 2.0, the code is cleaner, and the app will not crash if
+  open a non-existing file.
+
 * Introduction
   This is a simple flashcard application using SDL2, featuring
   keyboard-centric controls and extreme minimalistic.
+
+* Features
+  - Written in pure C, depends on SDL2 and SDL2_ttf only.
+  - Only use keyboard to control.
+  - Databases are in txt format, easy to edit with any software.
+  - Uses command line interface to import and export databases, great
+    for automation.
+
+* Prerequisite
+  Basic navigation with terminal is necessary. Unix system is
+  prefered.
+
+  The application should work on Windows machines with very little
+  modification. I do not have a Windows machine, so cannot test out.
+
+* Installation
+
+** macOS
+   Install Homebrew. [[https://brew.sh/][https://brew.sh/]]
+
+   Open the terminal and paste the following. Let it run until
+   finished.
+   #+begin_src shell
+     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   #+end_src
+
+   Install sdl2 and sdl2_ttf.
+   #+begin_src shell
+     brew install sdl2 sdl2_ttf
+   #+end_src
+
+   Next, you can either compile the application yourself or download
+   the binary.
+
+*** Compile your self. (Recommended)
+    Compile the application yourself can avoid Apple's stupid security
+    firewall. Compilation does not take long.
+
+    Install xcode command line tools. This is for compiling the
+    application.
+    #+begin_src shell
+      xcode-select --install
+    #+end_src
+
+    Clone the source code and compile. Input your password if necessary.
+    #+begin_src shell
+      mkdir ~/src
+      cd ~/src
+      git clone 'https://github.com/drshapeless/slcard.git'
+      cd slcard
+      make
+      sudo make install
+    #+end_src
+
+*** Download the binary.
+    This is the easier way to get things work.
+
+    Unzip the binary and install it, assuming the binary is at the
+    ~/Downloads folder. Input password if needed.
+    #+begin_src shell
+      sudo cp ~/Downloads/slcard /usr/local/bin/
+    #+end_src
+
+    If you Mac prevents you from opening the application, go to
+    settings and adjust your permissions.
+
+* Usage
+
+** Make a revision folder
+   It is recommended to create a revision folder in your home
+   directory to store all the related data.
+   #+begin_src shell
+     mkdir ~/revision
+   #+end_src
+
+   It is also recommended to create a database file for storing exported
+   database.
+   #+begin_src shell
+     mkdir ~/revision/database
+   #+end_src
+
+   In the revision folder, a score file and a log file would be
+   automatically created after your first game. They are quite useful
+   for tracking your overall revision progress.
+
+** Starting a game
+  There are three mode for reading a source file, plain, list,
+  database.
+
+  All of these format are just txt file.
+  - A plain is just a normal txt file, alternating between
+    question and answer.
+  - A list is a list of the locations of some plain files.
+  - A database is a json-like structure which can store the complete
+    game state at a certain time.
+
+
+  To start with a plain.
+  #+begin_src shell
+    slcard myfile.txt
+  #+end_src
+
+  You can also start with multiple plain files.
+  #+begin_src shell
+    slcard myfile_1.txt myfile_2.txt
+  #+end_src
+
+  To start with a list.
+  #+begin_src shell
+    slcard -l mylist.txt
+  #+end_src
+
+  Multiple lists.
+  #+begin_src shell
+    slcard -l mylist_1.txt -l mylist_2.txt
+  #+end_src
+
+  To start with a database. (The trailing db is just a convention for
+  database, it has nothing to do with internal recognition.)
+  #+begin_src shell
+    slcard -d 001db.txt
+  #+end_src
+
+  Multiple databases.
+  #+begin_src shell
+    slcard -d 001db.txt 002db.txt
+  #+end_src
+
+  You can mix different types together and form a new game.
+  #+begin_src shell
+    slcard myfile_1.txt -l mylist.txt -d 001db.txt
+  #+end_src
+
+** Rules
+   There is a mark for every question, when you forget, the mark
+   increases by one, when you remember, the mark decreases by
+   one. Once the mark of every question reaches zero, the game ends.
+
+** Basic navigations.
+   Only keyboard is needed to play the game, mouse cursor has no
+   effects.
+
+   - Space. Toggle show or hide the answer.
+   - N. Next question.
+   - P. Previous question.
+   - J. Mark as forgot and next question.
+   - K. Mark as remembered and next question.
+   - O. New game and shuffle.
+   - S. Shuffle.
+   - T. Add one forgot mark to every question.
+   - D. Export the current game as a database file. (If you did not
+     specify the output filename in the starting command, a file with
+     current time as name would be exported to the database folder in
+     ~/revision.)
+
+
+   For my personal experience, most the time was hitting J, K and
+   space. After reaching the last question (which can be seen on the
+   top right corner), hit O to start a new game, it would omit all
+   question with 0 marks.
+
+** Advanced usage.
+   If you want to create a new database file with some lists and
+   plains, or even some databases without starting the game, you can
+   use the -n flag at the end. A database file with the current time
+   as name would be exported.
+   #+begin_src shell
+     slcard -d 001db.txt -l mylist.txt myfile1.txt myfile2.txt -n
+   #+end_src
+
+   If you want to specify the output database name of a game, use the
+   -o flag followed by the name of the database. When you press D in
+   during a game, the exported database would be your defined
+   name. Useful for playing a big game which may take multiple
+   sessions.
+   #+begin_src shell
+     slcard -d 001db.txt -d 002db.txt -o newdb.txt
+   #+end_src
+
+   You can use both -n and -o flags together for merging
+   databases. What is does is merging two databases.
+   #+begin_src shell
+     slcard -d 001db.txt -d 002db.txt -o newdb.txt -n
+   #+end_src
 
 * Background
   This application is for personal use. I needed a flashcard tool to
@@ -14,7 +204,7 @@
   uses SQL to store the decks, which I do not need.
 
   Second, using Anki requires you to register an account, and the
-  database you made are automatically shared to everyone.
+  databases you made are automatically shared to everyone.
 
   Third, and the most important point is, Anki is not very
   keyboard-centric, and has a very limited way to customize you keys.
@@ -25,9 +215,7 @@
   Therefore, I got my hands dirty and made my own simple flashcard
   which fits all my needs.
 
-* Features
-  - Written in pure C, depends on SDL2 and SDL2_ttf only.
-  - Only use keyboard to control.
-  - Databases are in txt format, easy to edit with any software.
-  - Uses command line interface to import and export databases, great
-    for automation.
+* Todo list
+  - Add a graphical interface for initializing a game. (Not likely to happen.)
+  - Support for pixel perfect font rendering. (In progress.)
+  - In game visual customization. (Not in first priority.)
