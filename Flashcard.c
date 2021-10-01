@@ -52,7 +52,7 @@ FlashcardGame *createGame(void) {
   game->allocatedSize = INITIAL_GAME_SIZE;
   game->cards = malloc((sizeof(Flashcard) * INITIAL_GAME_SIZE));
   game->memoryCounts = malloc(sizeof(int) * INITIAL_GAME_SIZE);
-
+  game->cardIndexes = NULL;
 
   game->scoreFilePath = malloc(STRING_SIZE);
   strcpy(game->scoreFilePath, getenv("HOME"));
@@ -60,6 +60,7 @@ FlashcardGame *createGame(void) {
   game->goodScore = 0;
   game->badScore = 0;
   getScore(game);
+
 
   game->outputDatabasePath = NULL;
   game->openedFile = malloc(STRING_SIZE);

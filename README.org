@@ -27,6 +27,9 @@
 * Installation
 
 ** macOS
+   No matter if you want to compile or not, installing homebrew and
+   required dependencies is necessary.
+
    Install Homebrew. [[https://brew.sh/][https://brew.sh/]]
 
    Open the terminal and paste the following. Let it run until
@@ -75,16 +78,38 @@
     If you Mac prevents you from opening the application, go to
     settings and adjust your permissions.
 
+** GNU/Linux
+   I use Arch Linux as example.
+
+   Install sdl2 and sdl2_ttf.
+   #+begin_src shell
+     sudo pacman -S sdl2 sdl2_ttf
+   #+end_src
+
+   Clone the source code.
+   #+begin_src shell
+     git clone 'https://github.com/drshapeless/slcard.git'
+     cd slcard
+   #+end_src
+
+   Before you compile the code, please modify the FONT_PATH in
+   =Config.h= to what you have on your computer. After modification,
+   compile.
+   #+begin_src shell
+     make
+     sudo make install
+   #+end_src
+
 * Usage
 
 ** Make a revision folder
-   It is recommended to create a revision folder in your home
+   By default, It is required to create a revision folder in your home
    directory to store all the related data.
    #+begin_src shell
      mkdir ~/revision
    #+end_src
 
-   It is also recommended to create a database file for storing exported
+   It is also required to create a database file for storing exported
    database.
    #+begin_src shell
      mkdir ~/revision/database
@@ -106,14 +131,14 @@
     game state at a certain time.
 
 
-  To start with a plain.
+  To start with a plain file.
   #+begin_src shell
-    slcard myfile.txt
+    slcard -f myfile.txt
   #+end_src
 
   You can also start with multiple plain files.
   #+begin_src shell
-    slcard myfile_1.txt myfile_2.txt
+    slcard -f myfile_1.txt -f myfile_2.txt
   #+end_src
 
   To start with a list.
@@ -139,13 +164,14 @@
 
   You can mix different types together and form a new game.
   #+begin_src shell
-    slcard myfile_1.txt -l mylist.txt -d 001db.txt
+    slcard -f myfile_1.txt -l mylist.txt -d 001db.txt
   #+end_src
 
 ** Rules
-   There is a mark for every question, when you forget, the mark
-   increases by one, when you remember, the mark decreases by
-   one. Once the mark of every question reaches zero, the game ends.
+   There is a mark for every question, which I call the memory count,
+   when you forget, the mark increases by one, when you remember, the
+   mark decreases by one. Once the mark of every question reaches
+   zero, the game ends.
 
 ** Basic navigations.
    Only keyboard is needed to play the game, mouse cursor has no
@@ -176,7 +202,7 @@
    use the -n flag at the end. A database file with the current time
    as name would be exported.
    #+begin_src shell
-     slcard -d 001db.txt -l mylist.txt myfile1.txt myfile2.txt -n
+     slcard -d 001db.txt -l mylist.txt -f myfile1.txt -f myfile2.txt -n
    #+end_src
 
    If you want to specify the output database name of a game, use the
