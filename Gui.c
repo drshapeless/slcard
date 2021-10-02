@@ -294,26 +294,26 @@ void drawFlashcard(FlashcardGame *game, slWindow windowPara, slPosition position
   SDL_RenderClear(renderer);
 
   /* Draw memory count. */
-  char *memoryString = malloc(COUNT_SIZE);
+  char memoryString[COUNT_SIZE];
   sprintf(memoryString, "%d", currentMemoryCount(game));
   SDL_Color yellow = {255, 255, 0, 255};
   drawSmallText(renderer, memoryString, font, yellow, positions.memoryRect);
 
 
   /* Draw scores. */
-  char *badScoreString = malloc(COUNT_SIZE);
+  char badScoreString[COUNT_SIZE];
   sprintf(badScoreString, "%i", game->badScore);
   SDL_Color red = {255, 0, 0, 255};
   drawSmallText(renderer, badScoreString, font, red, positions.badScoreRect);
 
-  char *goodScoreString = malloc(COUNT_SIZE);
+  char goodScoreString[COUNT_SIZE];
   sprintf(goodScoreString, "%i", game->goodScore);
   SDL_Color green = {0, 255, 0, 255};
   drawSmallText(renderer, goodScoreString, font, green, positions.goodScoreRect);
 
 
   /* Draw counter. */
-  char *counterString = malloc(COUNT_SIZE * 3);
+  char counterString[COUNT_SIZE * 3];
   sprintf(counterString, "%d / %d", game->pos + 1, game->gameSize);
   SDL_Color white = {255, 255, 255, 255};
   drawSmallText(renderer, counterString, font, white, positions.counterRect);
