@@ -81,5 +81,5 @@ void showUsage(void) {
 }
 
 void showVersion(void) {
-  puts("slcard version 2.1.0");
+  puts("slcard version 2.1.1");
 }
