@@ -7,6 +7,7 @@ void updatePosition(slPosition *positions, slWindow windowPara);
 void drawFlashcard(FlashcardGame *game, slWindow windowPara, slPosition positions, TTF_Font *font, SDL_Renderer *renderer);
 SDL_Texture *createUtf8StringTexture(char *string, TTF_Font *font, SDL_Color color, SDL_Renderer *renderer);
 void windowResizeCallback(SDL_Window *window, slWindow *windowPara, slPosition *positions);
+void updateFont(TTF_Font *font, int fontsize);
 
 void guiRun(FlashcardGame *game) {
   /* Initializing SDL */
@@ -47,6 +48,7 @@ void guiRun(FlashcardGame *game) {
   slPosition *positions = malloc(sizeof (slPosition));
   updatePosition(positions, windowPara);
   newGame(game);
+  drawFlashcard(game, windowPara, *positions, font, renderer);
 
   SDL_Event e;
   int exit = 0;
@@ -98,6 +100,20 @@ void guiRun(FlashcardGame *game) {
           break;
         case SDLK_t:
           addOneMemoryCount(game);
+          break;
+        case SDLK_EQUALS:
+          windowPara.fontsize += 2;
+          updateFont(font, windowPara.fontsize);
+          updatePosition(positions, windowPara);
+          break;
+        case SDLK_MINUS:
+          if (windowPara.fontsize >= 4) {
+            windowPara.fontsize -= 2;
+            updateFont(font, windowPara.fontsize);
+            updatePosition(positions, windowPara);
+          }
+          break;
+        default:
           break;
         }
         drawFlashcard(game, windowPara, *positions, font, renderer);
@@ -186,7 +202,7 @@ char *breakString(char *string, TTF_Font *font, SDL_Renderer *renderer, int widt
   texture = createUtf8StringTexture("一", font, white, renderer);
   SDL_QueryTexture(texture, NULL, NULL, &fullWidth, NULL);
   SDL_DestroyTexture(texture);
-  spaceWidth = fullWidth / 2;
+  spaceWidth = fullWidth * 0.75;
 
   /* Have to minus one char. */
   width -= fullWidth;
@@ -321,4 +337,18 @@ void windowResizeCallback(SDL_Window *window, slWindow *windowPara, slPosition *
   positions->counterRect.x += windowPara->width;
   positions->goodScoreRect.x = windowPara->width / 3 * 2;
   positions->badScoreRect.x = windowPara->width / 3;
+}
+
+void updateFont(TTF_Font *font, int fontsize) {
+  if (!font) {
+    puts("updateFont: No font to update.");
+    return;
+  }
+
+  TTF_CloseFont(font);
+  font = TTF_OpenFont(FONT_PATH, fontsize);
+  if (!font) {
+    puts("guiRun: Cannot open font.");
+    return;
+  }
 }

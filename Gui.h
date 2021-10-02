@@ -10,7 +10,6 @@ typedef struct {
   int height;
   int padding;
   int fontsize;
-  TTF_Font *font;
 } slWindow;
 
 typedef struct {

@@ -1,0 +1,4 @@
+#+TITLE: slcard changelog
+
+<2021-10-02> Version 2.1.0. Added in-game font size adjustment feature.
+<2021-10-01> Version 2.0.0. Complete rewritten slcard.
