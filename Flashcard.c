@@ -334,7 +334,7 @@ void printScore(FlashcardGame *game) {
   time_t now = time(NULL);
   strftime(buf, 64, "%Y-%m-%d %H:%M:%S", localtime(&now));
 
-  printf("%s, bad: %d, good: %d", buf, game->badScore, game->goodScore);
+  printf("%s, bad: %d, good: %d\n", buf, game->badScore, game->goodScore);
 }
 
 void writeScore(FlashcardGame *game) {
@@ -404,12 +404,15 @@ int previousCard(FlashcardGame *game) {
 }
 
 void remember(FlashcardGame *game) {
-  if (game->memoryCounts[game->cardIndexes[game->pos]])
+  if (game->memoryCounts[game->cardIndexes[game->pos]]) {
     game->memoryCounts[game->cardIndexes[game->pos]]--;
+    game->goodScore++;
+  }
 }
 
 void forget(FlashcardGame *game) {
   game->memoryCounts[game->cardIndexes[game->pos]]++;
+  game->badScore++;
 }
 
 void restart(FlashcardGame *game) {

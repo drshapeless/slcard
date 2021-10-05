@@ -70,6 +70,7 @@ void guiRun(FlashcardGame *game) {
           writeScore(game);
           writeLog(game);
           exit = 1;
+          printScore(game);
           break;
         case SDLK_SPACE:
           toggleShowAnswer(game);
@@ -100,6 +101,7 @@ void guiRun(FlashcardGame *game) {
           break;
         case SDLK_t:
           addOneMemoryCount(game);
+          newGame(game);
           break;
         case SDLK_EQUALS:
           windowPara.fontsize += 2;
@@ -293,38 +295,46 @@ void drawText(SDL_Renderer *renderer, char *string, TTF_Font *font, SDL_Color co
 void drawFlashcard(FlashcardGame *game, slWindow windowPara, slPosition positions, TTF_Font *font, SDL_Renderer *renderer) {
   SDL_RenderClear(renderer);
 
-  /* Draw memory count. */
-  char memoryString[COUNT_SIZE];
-  sprintf(memoryString, "%d", currentMemoryCount(game));
-  SDL_Color yellow = {255, 255, 0, 255};
-  drawSmallText(renderer, memoryString, font, yellow, positions.memoryRect);
+  if (game->cardIndexes) {
+    /* Draw memory count. */
+    char memoryString[COUNT_SIZE];
+    sprintf(memoryString, "%d", currentMemoryCount(game));
+    SDL_Color yellow = {255, 255, 0, 255};
+    drawSmallText(renderer, memoryString, font, yellow, positions.memoryRect);
 
 
-  /* Draw scores. */
-  char badScoreString[COUNT_SIZE];
-  sprintf(badScoreString, "%i", game->badScore);
-  SDL_Color red = {255, 0, 0, 255};
-  drawSmallText(renderer, badScoreString, font, red, positions.badScoreRect);
+    /* Draw scores. */
+    char badScoreString[COUNT_SIZE];
+    sprintf(badScoreString, "%i", game->badScore);
+    SDL_Color red = {255, 0, 0, 255};
+    drawSmallText(renderer, badScoreString, font, red, positions.badScoreRect);
 
-  char goodScoreString[COUNT_SIZE];
-  sprintf(goodScoreString, "%i", game->goodScore);
-  SDL_Color green = {0, 255, 0, 255};
-  drawSmallText(renderer, goodScoreString, font, green, positions.goodScoreRect);
-
-
-  /* Draw counter. */
-  char counterString[COUNT_SIZE * 3];
-  sprintf(counterString, "%d / %d", game->pos + 1, game->gameSize);
-  SDL_Color white = {255, 255, 255, 255};
-  drawSmallText(renderer, counterString, font, white, positions.counterRect);
+    char goodScoreString[COUNT_SIZE];
+    sprintf(goodScoreString, "%i", game->goodScore);
+    SDL_Color green = {0, 255, 0, 255};
+    drawSmallText(renderer, goodScoreString, font, green, positions.goodScoreRect);
 
 
-  /* Draw question. */
-  drawText(renderer, currentQuestion(game), font, white, positions.questionRect, windowPara.width - windowPara.padding * 2);
+    /* Draw counter. */
+    char counterString[COUNT_SIZE * 3];
+    sprintf(counterString, "%d / %d", game->pos + 1, game->gameSize);
+    SDL_Color white = {255, 255, 255, 255};
+    drawSmallText(renderer, counterString, font, white, positions.counterRect);
 
-  /* Draw answer. */
-  if (game->showAnswer) {
-    drawText(renderer, currentAnswer(game), font, white, positions.answerRect, windowPara.width - windowPara.padding * 2);
+
+    /* Draw question. */
+    drawText(renderer, currentQuestion(game), font, white, positions.questionRect, windowPara.width - windowPara.padding * 2);
+
+    /* Draw answer. */
+    if (game->showAnswer) {
+      drawText(renderer, currentAnswer(game), font, white, positions.answerRect, windowPara.width - windowPara.padding * 2);
+    }
+  } else {
+    SDL_Color white = {255, 255, 255, 255};
+    char *endGameMessage0 = "You have completed all cards.";
+    char *endGameMessage1 = "Press T to add one memory count to all cards. Press ESC to close slcard.";
+    drawText(renderer, endGameMessage0, font, white, positions.questionRect, windowPara.width - windowPara.padding * 2);
+    drawText(renderer, endGameMessage1, font, white, positions.answerRect, windowPara.width - windowPara.padding * 2);
   }
 
   SDL_RenderPresent(renderer);
