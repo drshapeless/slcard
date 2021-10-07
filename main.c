@@ -2,6 +2,7 @@
 #include "Console.h"
 #include "Flashcard.h"
 #include "Gui.h"
+#include "Version.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -81,5 +82,5 @@ void showUsage(void) {
 }
 
 void showVersion(void) {
-  puts("slcard version 2.1.2");
+  printf("slcard version %d.%d.%d\n", SLCARD_MAJOR_VERSION, SLCARD_MINOR_VERSION, SLCARD_PATCH);
 }

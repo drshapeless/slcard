@@ -1,0 +1,8 @@
+#ifndef VERSION_H
+#define VERSION_H
+
+#define SLCARD_MAJOR_VERSION 2
+#define SLCARD_MINOR_VERSION 1
+#define SLCARD_PATCH 2
+
+#endif /* VERSION_H */

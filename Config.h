@@ -15,10 +15,14 @@
 #define WINDOW_PADDING 15
 #define FONT_SIZE 32
 
+#ifdef __linux__
 /* Linux user should define their own path to ttf file. */
-/* #define FONT_PATH "/usr/share/fonts/ttf/PingFang.ttc" */
+#define FONT_PATH "/usr/share/fonts/ttf/PingFang.ttc"
+#endif
 
+#ifdef __APPLE__
 /* For macOS, using PingFang for out-of-the-box Chinese support. */
 #define FONT_PATH "/System/Library/Fonts/PingFang.ttc"
+#endif
 
 #endif /* CONFIG_H */
