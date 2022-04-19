@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
   int consoleMode = 0;
 
   int c;
-  while ((c = getopt(argc, argv, "hncvd:f:l:o:s:")) != -1) {
+  while ((c = getopt(argc, argv, "hncvd:f:j:l:o:s:")) != -1) {
     switch (c) {
     case 'h':
       showUsage();
@@ -38,6 +38,10 @@ int main(int argc, char *argv[]) {
       break;
     case 'f':
       addFile(game, optarg);
+      break;
+    case 'j':
+      addJson(game, optarg);
+      printf("%s\n", optarg);
       break;
     case 'l':
       addFileList(game, optarg);
@@ -77,6 +81,7 @@ void showUsage(void) {
          "-f               Add a plain file.\n"
          "-d file          Add a database.\n"
          "-l file          Add a file list.\n"
+         "-j file          Add a json file.\n"
          "-s file          Specify the score file.\n"
          "-o file          Export as file.\n");
 }

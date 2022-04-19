@@ -2,7 +2,7 @@
 #define VERSION_H
 
 #define SLCARD_MAJOR_VERSION 2
-#define SLCARD_MINOR_VERSION 1
-#define SLCARD_PATCH 2
+#define SLCARD_MINOR_VERSION 2
+#define SLCARD_PATCH 0
 
 #endif /* VERSION_H */

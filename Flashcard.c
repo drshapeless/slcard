@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
+#include <jansson.h>
 
 void getScore(FlashcardGame *game) {
   FILE *file = NULL;
@@ -228,6 +229,39 @@ void addFileList(FlashcardGame *game, char *fileListName) {
   }
 
   printf("File list imported: %s\n", fileListName);
+}
+
+void addJson(FlashcardGame *game, char *jsonFileName) {
+  FILE *f = NULL;
+  f = fopen(jsonFileName, "r");
+  if (!f) {
+    printf("JSON not found: %s\n", jsonFileName);
+    return;
+  }
+
+  /* Ignore the error. */
+  json_t *js = json_loadf(f, 0, NULL);
+  if (!js) {
+    printf("JSON format error: %s\n", jsonFileName);
+    return;
+  }
+
+  int size = (int)json_array_size(js);
+
+  for (int i = 0; i < size; i++) {
+    json_t *currentObj = json_array_get(js, i);
+    json_t *questionObj = json_object_get(currentObj, "question");
+    char *question = json_string_value(questionObj);
+
+    json_t *answerObj = json_object_get(currentObj, "answer");
+    char *answer = json_string_value(answerObj);
+
+    addNewCard(game, question, answer, 1);
+  }
+
+  json_decref(js);
+  fclose(f);
+  printf("JSON imported: %s\n", jsonFileName);
 }
 
 char *databaseString(Flashcard card, int count) {

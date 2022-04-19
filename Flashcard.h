@@ -33,6 +33,7 @@ void destroyGame(FlashcardGame *game);
 void addDatabase(FlashcardGame *game, char *databaseName);
 void addFile(FlashcardGame *game, char *fileName);
 void addFileList(FlashcardGame *game, char *fileListName);
+void addJson(FlashcardGame *game, char *jsonFileName);
 void exportToDatabase(FlashcardGame *game);
 int *forgottenCards(int *counts, int usedSize, int *newSize);
 void writeLog(FlashcardGame *game);

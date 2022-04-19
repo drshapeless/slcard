@@ -1,5 +1,5 @@
 CC = clang
-LIBS = -lSDL2 -lSDL2_ttf
+LIBS = -lSDL2 -lSDL2_ttf -ljansson
 OBJS = main.o Console.o Flashcard.o Utilities.o Gui.o
 
 slcard: $(OBJS)
