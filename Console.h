@@ -2,6 +2,6 @@
 #define CONSOLE_H
 #include "Flashcard.h"
 
-void consoleRun(FlashcardGame *game);
+void consoleRun(struct FlashcardGame *game);
 
 #endif /* CONSOLE_H */

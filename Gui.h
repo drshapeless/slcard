@@ -5,22 +5,22 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-typedef struct {
-  int width;
-  int height;
-  int padding;
-  int fontsize;
-} slWindow;
+struct slWindow {
+	int width;
+	int height;
+	int padding;
+	int fontsize;
+};
 
-typedef struct {
-  SDL_Rect questionRect;
-  SDL_Rect answerRect;
-  SDL_Rect memoryRect;
-  SDL_Rect counterRect;
-  SDL_Rect goodScoreRect;
-  SDL_Rect badScoreRect;
-} slPosition;
+struct slPosition {
+	SDL_Rect questionRect;
+	SDL_Rect answerRect;
+	SDL_Rect memoryRect;
+	SDL_Rect counterRect;
+	SDL_Rect goodScoreRect;
+	SDL_Rect badScoreRect;
+};
 
-void guiRun(FlashcardGame *game);
+void guiRun(struct FlashcardGame *game);
 
 #endif /* GUI_H */

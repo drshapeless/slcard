@@ -1,57 +1,57 @@
 #ifndef FLASHCARD_H
 #define FLASHCARD_H
 
-typedef struct Flashcard {
-  char *question;
-  char *answer;
-} Flashcard;
+struct Flashcard {
+	char *question;
+	char *answer;
+};
 
-typedef struct FlashcardGame {
-  /* Array of cards. */
-  Flashcard *cards;
-  /* Array of memory counts. */
-  int *memoryCounts;
+struct FlashcardGame {
+	/* Array of cards. */
+	struct Flashcard *cards;
+	/* Array of memory counts. */
+	int *memoryCounts;
 
-  int usedSize;
-  int allocatedSize;
+	int usedSize;
+	int allocatedSize;
 
-  int goodScore;
-  int badScore;
+	int goodScore;
+	int badScore;
 
-  int pos;
-  int showAnswer;
-  int *cardIndexes;
-  int gameSize;
+	int pos;
+	int showAnswer;
+	int *cardIndexes;
+	int gameSize;
 
-  char *outputDatabasePath;
-  char *scoreFilePath;
-  char *openedFile;
-} FlashcardGame;
+	char *outputDatabasePath;
+	char *scoreFilePath;
+	char *openedFile;
+};
 
-FlashcardGame *createGame(void);
-void destroyGame(FlashcardGame *game);
-void addDatabase(FlashcardGame *game, char *databaseName);
-void addFile(FlashcardGame *game, char *fileName);
-void addFileList(FlashcardGame *game, char *fileListName);
-void addJson(FlashcardGame *game, char *jsonFileName);
-void exportToDatabase(FlashcardGame *game);
+struct FlashcardGame *createGame(void);
+void destroyGame(struct FlashcardGame *game);
+void addDatabase(struct FlashcardGame *game, char *databaseName);
+void addFile(struct FlashcardGame *game, char *fileName);
+void addFileList(struct FlashcardGame *game, char *fileListName);
+void addJson(struct FlashcardGame *game, char *jsonFileName);
+void exportToDatabase(struct FlashcardGame *game);
 int *forgottenCards(int *counts, int usedSize, int *newSize);
-void writeLog(FlashcardGame *game);
-void printScore(FlashcardGame *game);
-void importScoreFile(FlashcardGame *game, char *scoreFilePath);
-void writeScore(FlashcardGame *game);
+void writeLog(struct FlashcardGame *game);
+void printScore(struct FlashcardGame *game);
+void importScoreFile(struct FlashcardGame *game, char *scoreFilePath);
+void writeScore(struct FlashcardGame *game);
 
 void shuffleCards(int *cards, int size);
-void addOneMemoryCount(FlashcardGame *game);
-int newGame(FlashcardGame *game);
-int nextCard(FlashcardGame *game);
-int previousCard(FlashcardGame *game);
-void remember(FlashcardGame *game);
-void forget(FlashcardGame *game);
-void restart(FlashcardGame *game);
-void shuffle(FlashcardGame *game);
-char *currentQuestion(FlashcardGame *game);
-char *currentAnswer(FlashcardGame *game);
-int currentMemoryCount(FlashcardGame *game);
-void toggleShowAnswer(FlashcardGame *game);
+void addOneMemoryCount(struct FlashcardGame *game);
+int newGame(struct FlashcardGame *game);
+int nextCard(struct FlashcardGame *game);
+int previousCard(struct FlashcardGame *game);
+void remember(struct FlashcardGame *game);
+void forget(struct FlashcardGame *game);
+void restart(struct FlashcardGame *game);
+void shuffle(struct FlashcardGame *game);
+char *currentQuestion(struct FlashcardGame *game);
+char *currentAnswer(struct FlashcardGame *game);
+int currentMemoryCount(struct FlashcardGame *game);
+void toggleShowAnswer(struct FlashcardGame *game);
 #endif /* FLASHCARD_H */
